@@ -26,14 +26,14 @@ For your own work, you can use the same environment if you want to work with goo
 
 <!-- #endregion -->
 
-```bash id="nMThqa-DjVcb" colab={"base_uri": "https://localhost:8080/"} outputId="86ac4a4a-c472-48cd-ceb5-060b93d187a9"
+```bash id="nMThqa-DjVcb"
 
 BASE_URL="https://drive.google.com/u/0/uc?id=1tyU77ekLDPvmdF4DZSDKz78-MTC3LR6P&export=download"
 wget -q --load-cookies /tmp/cookies.txt "$BASE_URL&confirm=$(wget -q --save-cookies /tmp/cookies.txt --keep-session-cookies --no-check-certificate $BASE_URL -O- | sed -rn 's/.*confirm=(\w+).*/\1\n/p')" -O pysages-env.zip
 rm -rf /tmp/cookies.txt
 ```
 
-```python colab={"base_uri": "https://localhost:8080/"} id="25H3kl03wzJe" outputId="11010f4e-14b7-4398-ff71-250c1f62a96a"
+```bash colab={"base_uri": "https://localhost:8080/"} id="25H3kl03wzJe" outputId="0c046912-9546-4dc8-eff7-35a00f43639b"
 %env PYSAGES_ENV=/env/pysages
 ```
 
@@ -43,7 +43,7 @@ mkdir -p $PYSAGES_ENV
 unzip -qquo pysages-env.zip -d $PYSAGES_ENV
 ```
 
-```python id="JMO5fiRTxAWB"
+```bash id="JMO5fiRTxAWB"
 import os
 import sys
 
@@ -58,14 +58,13 @@ sys.path.append(os.environ["PYSAGES_ENV"] + "/lib/python" + str(ver.major) + "."
 We will later use packmol, so we first have to install it. Packmol is free software and can be distributed under the MIT license.
 <!-- #endregion -->
 
-```bash colab={"base_uri": "https://localhost:8080/"} id="4_I4No0UEM-N" outputId="a811f40d-57a1-4d8b-83a2-81e90bfc5f77"
+```bash colab={"base_uri": "https://localhost:8080/"} id="4_I4No0UEM-N" outputId="f3572109-c238-4036-beec-648b097acb1c"
 
 wget http://leandro.iqm.unicamp.br/m3g/packmol/packmol.tar.gz
 tar -xvzf packmol.tar.gz
 ```
 
-```bash colab={"base_uri": "https://localhost:8080/"} id="P60mTHcaEmNT" outputId="503232a8-e738-4a6f-ecf3-50a8a3798ed0"
-
+```bash colab={"base_uri": "https://localhost:8080/"} id="P60mTHcaEmNT" outputId="226a6872-a5b0-43b8-a98a-e33c851c10bb"
 cd packmol
 mkdir build
 cd build
@@ -73,12 +72,11 @@ cmake -DCMAKE_INSTALL_PREFIX=../install ..
 make install
 ```
 
-```bash colab={"base_uri": "https://localhost:8080/"} id="KIH0iKEpE-6h" outputId="1f3f41ee-433a-4a99-e8b7-f7f9465d87a3"
-
+```bash colab={"base_uri": "https://localhost:8080/"} id="KIH0iKEpE-6h" outputId="17af48ee-7f5a-4662-8ae6-8550bbfbaefe"
 echo $PATH
 ```
 
-```python colab={"base_uri": "https://localhost:8080/"} id="2qLROz9IFa4W" outputId="b572bc51-f299-4030-d56b-ac7bb56eef04"
+```bash colab={"base_uri": "https://localhost:8080/"} id="2qLROz9IFa4W" outputId="de5b2469-b390-4ccc-f333-4c302b658f95"
 %env PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/tools/node/bin:/tools/google-cloud-sdk/bin:/opt/bin:/content/packmol/install/bin
 ```
 
@@ -124,7 +122,6 @@ The PDB data file for one molecule contains initial atom positions. PDB is not t
 <!-- #endregion -->
 
 ```bash id="yV-hcVTTASyG"
-
 echo "HEADER 
 TITLE     Built with Packmol                                             
 REMARK   Packmol generated pdb file 
@@ -160,8 +157,7 @@ END
 The XML "forcefield" file specifies all the forcefield parameters for OPLS.
 <!-- #endregion -->
 
-```bash id="fuYwODUHGUz3" colab={"base_uri": "https://localhost:8080/"} outputId="8f913e95-6425-4664-f12e-d0f1c6922af0"
-
+```bash colab={"base_uri": "https://localhost:8080/"} id="fuYwODUHGUz3" outputId="d21f1b53-a258-41d9-f975-4c4ca42508d9"
 echo "<?xml version='1.0' encoding='iso-8859-1'?>
 <ForceField comment=\"Created by Stage/AcPype\">
   <AtomTypes>
@@ -280,7 +276,6 @@ Note, that we purposefully do not use the PDB `CONECT` field here.
 <!-- #endregion -->
 
 ```bash id="64AL2vinP0fT"
-
 echo "<?xml version='1.0' encoding='iso-8859-1'?>
 <Residues>
   <Residue name=\"A\">
@@ -331,8 +326,7 @@ end structure" > packmol.inp
 We use this to pack the molecules with packmol.
 <!-- #endregion -->
 
-```bash colab={"base_uri": "https://localhost:8080/"} id="iHMOBF1vJe4v" outputId="9b31f7b8-6a16-49cb-bc2f-5ae39efe10da"
-
+```bash colab={"base_uri": "https://localhost:8080/"} id="iHMOBF1vJe4v" outputId="35b93678-f87f-4c2a-b0a9-5a0b342b142f"
 packmol < packmol.inp
 head -n 5 tmp.pdb > bulk.pdb
 echo "CRYST1    40.00    40.00    40.00  90.00  90.00  90.00 P 1           1" >> bulk.pdb
@@ -355,7 +349,7 @@ We have all ingredients ready to start the OpenMM simulation. First, we import t
 Note how OpenMM handles units, it relates them to prefixed SI units which are fundamentally different than HOOMD-blue but common for a simulation tool that focuses on all-atom simulations. We are using a Langevin Integrator as a thermostat and a Barostat for NPT simulation, which uses Monte-Carlo moves to adjust the simulation box volume similar to the method discussed in the lecture.
 <!-- #endregion -->
 
-```python id="cZ_7uZTUKT4M" colab={"base_uri": "https://localhost:8080/", "height": 386} outputId="caf15af0-2004-44be-f51e-792af4bf03d3"
+```bash colab={"base_uri": "https://localhost:8080/"} id="cZ_7uZTUKT4M" outputId="b634d8ee-613a-4e5b-ce74-518b66ea3d0d"
 import sys
 import simtk
 from simtk.openmm.app import PDBFile, ForceField, HBonds, Simulation, StateDataReporter, PME, PDBReporter
@@ -367,7 +361,7 @@ from simtk.unit import kelvin, picosecond, nanometer, bar
 First, we define some of the essential parameters and read initial conditions and forcefield.
 <!-- #endregion -->
 
-```python id="2o4_xIVyFeo4"
+```bash id="2o4_xIVyFeo4"
 delta_t = 0.001
 seed = 42
 time_steps = int(1e6)
@@ -379,7 +373,7 @@ forcefield = ForceField('forcefield.xml')
 
 ```
 
-```python id="IUUimsPyRc7Y"
+```bash id="IUUimsPyRc7Y"
 import simtk
 from simtk.openmm import CustomNonbondedForce
 
@@ -425,7 +419,7 @@ def opls_lj(system):
 Next we initialize the OpenMM simulation.
 <!-- #endregion -->
 
-```python id="Y74a7vnLGCsm"
+```bash id="Y74a7vnLGCsm"
 system = forcefield.createSystem(pdb.topology, nonbondedMethod=PME, nonbondedCutoff=1*nanometer, constraints=HBonds)
 # We want to specify our own functional form of the non-bonded LJ interactions.
 system = opls_lj(system)
@@ -455,13 +449,12 @@ simulation.reporters.append(StateDataReporter(sys.stdout, 1000, step=True, remai
 Now we can run the simulation.
 <!-- #endregion -->
 
-```python id="QmsBBG4FIOlJ"
+```bash id="QmsBBG4FIOlJ" outputId="7d6ff32f-af21-4ce0-9649-db9287f0805f" colab={"base_uri": "https://localhost:8080/"}
 simulation.step(time_steps)
 simulation.saveState('final.xml')
 ```
 
-```bash id="q7PGfqbqUalY"
-
+```bash id="q7PGfqbqUalY" outputId="7d74cc80-3e75-40a3-b0a0-79b0b225307d" colab={"base_uri": "https://localhost:8080/"}
 head final.xml
 head obs.dat
 ```
@@ -474,7 +467,7 @@ We know that the density of Hexane should be $0.6606 g/\mathrm{m}L$ so we can tr
 But first, we take a look at the equilibration from the rough initial conditions.
 <!-- #endregion -->
 
-```python id="0yAwSvUMVr6a"
+```bash id="0yAwSvUMVr6a" outputId="f135a2ae-344f-445f-bd20-9dc378e6cded" colab={"base_uri": "https://localhost:8080/", "height": 559}
 import numpy as np
 import matplotlib.pyplot as plt
 step, Epot, temp, vol, rho = np.loadtxt("obs.dat", skiprows=1, delimiter=",", unpack=True)
@@ -498,7 +491,7 @@ Now let's take a look at the density.
 
 <!-- #endregion -->
 
-```python id="qhYu1WJrXOuJ"
+```bash id="qhYu1WJrXOuJ" outputId="4a14e2d8-c145-4caf-b04c-51a551bcf068" colab={"base_uri": "https://localhost:8080/", "height": 297}
 fig, ax = plt.subplots()
 ax.set_xlabel(r"time [ps]")
 ax.set_ylabel(r"$\rho$ [$g$/m$L$]")
