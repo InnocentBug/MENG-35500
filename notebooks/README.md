@@ -17,6 +17,14 @@ Note, that you won't have permissions to upload the final results into Google dr
 
 [![OpenMM](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/InnocentBug/PySAGES/blob/google-colab/docs/notebooks/Install_PySAGES_Environment.ipynb)
 
+
+## Block analysis
+
+There is also an example for block analysis:
+
+[![Block Analysis](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/InnocentBug/MENG-35500/blob/main/notebooks/Block_Analysis.ipynb)
+
+
 ### Disclaimer
 
 We have no affiliation with Google or are endorsing Google products.
